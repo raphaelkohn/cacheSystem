@@ -2,7 +2,7 @@ import Foundation
 
 public class CacheSystem {
     
-    public var shared: CacheSystem = CacheSystem()
+    public static var shared: CacheSystem = CacheSystem()
     private var capacity: UInt64 = 2 * 1024 * 1024 * 1024
     private var cachedImages: [String: ImageFileCache] = [:]
     
