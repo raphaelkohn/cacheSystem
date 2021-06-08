@@ -40,7 +40,7 @@ public class ImageFileCache: NSObject, NSCoding {
     
     public func encode(with coder: NSCoder) {
         
-        coder.encode(fileSize, forKey: "fileSize")
+        coder.encode(Int64(fileSize), forKey: "fileSize")
         coder.encode(filePath, forKey: "filePath")
         coder.encode(id, forKey: "id")
         coder.encode(remoteUrl, forKey: "remoteUrl")
@@ -49,7 +49,7 @@ public class ImageFileCache: NSObject, NSCoding {
     
     public required init?(coder: NSCoder) {
         
-        self.fileSize  = UInt64(coder.decodeInteger(forKey: "fileSize"))
+        self.fileSize  = UInt64(coder.decodeInt64(forKey: "fileSize"))
         self.filePath  = coder.decodeObject(forKey: "filePath") as? String
         self.id        = coder.decodeObject(forKey: "id") as! String
         self.remoteUrl = coder.decodeObject(forKey: "remoteUrl") as! String
