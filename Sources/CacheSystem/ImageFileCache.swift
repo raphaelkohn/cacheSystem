@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ImageFileCache {
+public class ImageFileCache: NSObject, NSCoding {
     
     public var fileSize: UInt64 = 0
     public var filePath: String?
@@ -22,7 +22,7 @@ public struct ImageFileCache {
         self.cached    = false
     }
     
-    public mutating func removeCache() {
+    public func removeCache() {
         
         guard let filePath = self.filePath else { return }
         
@@ -36,5 +36,23 @@ public struct ImageFileCache {
                 print("couldn't remove file at path", removeError)
             }
         }
+    }
+    
+    public func encode(with coder: NSCoder) {
+        
+        coder.encode(fileSize, forKey: "fileSize")
+        coder.encode(filePath, forKey: "filePath")
+        coder.encode(id, forKey: "id")
+        coder.encode(remoteUrl, forKey: "remoteUrl")
+        coder.encode(cached, forKey: "cached")
+    }
+    
+    public required init?(coder: NSCoder) {
+        
+        self.fileSize  = UInt64(coder.decodeInteger(forKey: "fileSize"))
+        self.filePath  = coder.decodeObject(forKey: "filePath") as? String
+        self.id        = coder.decodeObject(forKey: "id") as! String
+        self.remoteUrl = coder.decodeObject(forKey: "remoteUrl") as! String
+        self.cached    = coder.decodeBool(forKey: "cached")
     }
 }
