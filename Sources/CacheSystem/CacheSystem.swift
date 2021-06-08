@@ -25,8 +25,17 @@ public class CacheSystem {
         
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         
+        
+        if !FileManager.default.fileExists(atPath: documentsDirectory.appendingPathComponent("cachedImages").path) {
+            
+            do {
+            try FileManager.default.createDirectory(atPath: documentsDirectory.appendingPathComponent("cachedImages").path, withIntermediateDirectories: false, attributes: nil)
+            } catch let createError {
+                print("couldn't create directory at path", createError)
+            }
+        }
+        
         let fileURL = documentsDirectory.appendingPathComponent("cachedImages").appendingPathComponent(id)
-        //guard let data = image.jpegData(compressionQuality: 1) else { return }
         let fileSize = UInt64(image.count)
         
         if FileManager.default.fileExists(atPath: fileURL.path) {
