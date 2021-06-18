@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class ImageFileCache: NSObject, NSCoding {
+@objc public class ImageFileCache: NSObject, NSCoding {
     
     public var fileSize: UInt64 = 0
     public var filePath: String?
@@ -15,14 +15,14 @@ public class ImageFileCache: NSObject, NSCoding {
     public let remoteUrl: String
     public var cached: Bool
     
-    public init(id: String, remoteUrl: String) {
+    @objc public init(id: String, remoteUrl: String) {
         
         self.id        = id
         self.remoteUrl = remoteUrl
         self.cached    = false
     }
     
-    public func removeCache() {
+    @objc public func removeCache() {
         
         guard let filePath = self.filePath else { return }
         
@@ -38,7 +38,7 @@ public class ImageFileCache: NSObject, NSCoding {
         }
     }
     
-    public func encode(with coder: NSCoder) {
+    @objc public func encode(with coder: NSCoder) {
         
         coder.encode(Int64(fileSize), forKey: "fileSize")
         coder.encode(filePath, forKey: "filePath")
@@ -47,7 +47,7 @@ public class ImageFileCache: NSObject, NSCoding {
         coder.encode(cached, forKey: "cached")
     }
     
-    public required init?(coder: NSCoder) {
+    @objc public required init?(coder: NSCoder) {
         
         self.fileSize  = UInt64(coder.decodeInt64(forKey: "fileSize"))
         self.filePath  = coder.decodeObject(forKey: "filePath") as? String

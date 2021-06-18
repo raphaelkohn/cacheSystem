@@ -5,12 +5,12 @@ import Foundation
     public static var shared: CacheSystem = CacheSystem()
     private var capacity: UInt64 = 2 * 1024 * 1024 * 1024
     
-    public func setCapacity(_ capacity: UInt64) {
+    @objc public func setCapacity(_ capacity: UInt64) {
         
         self.capacity = capacity
     }
     
-    public func getImage(forId id: String) -> ImageFileCache? {
+    @objc public func getImage(forId id: String) -> ImageFileCache? {
         
         if let data = UserDefaults.standard.data(forKey: id) {
             return NSKeyedUnarchiver.unarchiveObject(with: data) as? ImageFileCache
@@ -19,13 +19,13 @@ import Foundation
         }
     }
     
-    public func createCache(_ image: ImageFileCache) {
+    @objc public func createCache(_ image: ImageFileCache) {
         
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: image)
         UserDefaults.standard.set(encodedData, forKey: image.id)
     }
     
-    public func saveImageToDisk(image: Data, id: String) {
+    @objc public func saveImageToDisk(image: Data, id: String) {
         
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         
