@@ -9,11 +9,11 @@ import Foundation
 
 @objc public class ImageFileCache: NSObject, NSCoding {
     
-    public var fileSize: UInt64 = 0
-    public var filePath: String?
-    public let id: String
-    public let remoteUrl: String
-    public var cached: Bool
+    @objc public var fileSize: UInt64 = 0
+    @objc public var filePath: String?
+    @objc public let id: String
+    @objc public let remoteUrl: String
+    @objc public var cached: Bool
     
     @objc public init(id: String, remoteUrl: String) {
         
