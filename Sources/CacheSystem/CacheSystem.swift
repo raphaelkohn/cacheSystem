@@ -1,10 +1,9 @@
 import Foundation
 
-public class CacheSystem {
+@objc public class CacheSystem: NSObject {
     
     public static var shared: CacheSystem = CacheSystem()
     private var capacity: UInt64 = 2 * 1024 * 1024 * 1024
-//    private var cachedImages: [String: ImageFileCache] = [:]
     
     public func setCapacity(_ capacity: UInt64) {
         
@@ -18,12 +17,10 @@ public class CacheSystem {
         } else {
             return nil
         }
-        //return self.cachedImages[id]
     }
     
     public func createCache(_ image: ImageFileCache) {
         
-//        self.cachedImages[image.id] = image
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: image)
         UserDefaults.standard.set(encodedData, forKey: image.id)
     }
@@ -66,7 +63,7 @@ public class CacheSystem {
                 let cache = NSKeyedUnarchiver.unarchiveObject(with: data) as! ImageFileCache
                 cache.cached   = true
                 cache.fileSize = fileSize
-                cache.filePath = fileURL.path
+                cache.filePath = fileURL.relativePath
                 
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: cache)
                 UserDefaults.standard.set(encodedData, forKey: cache.id)
@@ -92,18 +89,18 @@ public class CacheSystem {
 //        var spaceToFree = 0
 //        var numberOfFilesToErase = 0
 //        for cache in self.cachedImages {
-//            
+//
 //            spaceToFree += Int(cache.value.fileSize)
 //            numberOfFilesToErase += 1
-//            
+//
 //            if spaceToFree > fileSize {
-//                
+//
 //                break
 //            }
 //        }
-//        
+//
 //        for i in (0...numberOfFilesToErase) {
-//            
+//
 //            let keyToErase = Array(self.cachedImages.keys)[i]
 //            self.cachedImages[keyToErase]?.removeCache()
 //        }
