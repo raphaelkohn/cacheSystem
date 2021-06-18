@@ -2,7 +2,7 @@ import Foundation
 
 @objc public class CacheSystem: NSObject {
     
-    public static var shared: CacheSystem = CacheSystem()
+    @objc public static var shared: CacheSystem = CacheSystem()
     private var capacity: UInt64 = 2 * 1024 * 1024 * 1024
     
     @objc public func setCapacity(_ capacity: UInt64) {
