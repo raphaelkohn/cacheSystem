@@ -12,17 +12,39 @@ import Foundation
     
     @objc public func getImage(forId id: String) -> ImageFileCache? {
         
-        if let data = UserDefaults.standard.data(forKey: id) {
-            return NSKeyedUnarchiver.unarchiveObject(with: data) as? ImageFileCache
+        if let data = UserDefaults.cacheSystem.data(forKey: id) {
+            let cache = NSKeyedUnarchiver.unarchiveObject(with: data) as? ImageFileCache
+            guard let cacheId = cache?.id else { return nil }
+            
+            if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                let filePath = documentsDirectory.appendingPathComponent("cachedImages").appendingPathComponent(cacheId).path
+                
+                if FileManager.default.fileExists(atPath: filePath) {
+                    
+                    do {
+                        
+                        let imageData = try Data(contentsOf: URL(fileURLWithPath: filePath))
+                        cache?.imageData = imageData
+                        return cache
+                        
+                    } catch {
+                        
+                        return nil
+                    }
+                }
+            }
+            
         } else {
             return nil
         }
+        
+        return nil
     }
     
     @objc public func createCache(_ image: ImageFileCache) {
         
         let encodedData = NSKeyedArchiver.archivedData(withRootObject: image)
-        UserDefaults.standard.set(encodedData, forKey: image.id)
+        UserDefaults.cacheSystem.set(encodedData, forKey: image.id)
     }
     
     @objc public func saveImageToDisk(image: Data, id: String) {
@@ -57,7 +79,7 @@ import Foundation
                 freeSpace(until: fileSize)
             }
             
-            if let data = UserDefaults.standard.data(forKey: id) {
+            if let data = UserDefaults.cacheSystem.data(forKey: id) {
                 
                 try image.write(to: fileURL)
                 let cache = NSKeyedUnarchiver.unarchiveObject(with: data) as! ImageFileCache
@@ -68,8 +90,8 @@ import Foundation
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: cache)
                 UserDefaults.standard.set(encodedData, forKey: cache.id)
                 
-                let currentUsed = UserDefaults.standard.integer(forKey: "usedCapacity")
-                UserDefaults.standard.set(currentUsed + Int(cache.fileSize), forKey: "usedCapacity")
+                let currentUsed = UserDefaults.cacheSystem.integer(forKey: "usedCapacity")
+                UserDefaults.cacheSystem.set(currentUsed + Int(cache.fileSize), forKey: "usedCapacity")
             }
             
         } catch let error {
@@ -79,7 +101,7 @@ import Foundation
     
     private func checkCapacity(for fileSize: UInt64) -> Bool {
         
-        let currentUsed = UserDefaults.standard.integer(forKey: "usedCapacity")
+        let currentUsed = UserDefaults.cacheSystem.integer(forKey: "usedCapacity")
         
         return (UInt64(currentUsed) + fileSize) < capacity
     }

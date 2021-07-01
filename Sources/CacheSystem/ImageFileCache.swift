@@ -14,6 +14,7 @@ import Foundation
     @objc public let id: String
     @objc public let remoteUrl: String
     @objc public var cached: Bool
+    @objc public var imageData: Data?
     
     @objc public init(id: String, remoteUrl: String) {
         
