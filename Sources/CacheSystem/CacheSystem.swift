@@ -88,7 +88,7 @@ import Foundation
                 cache.filePath = fileURL.relativePath
                 
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: cache)
-                UserDefaults.standard.set(encodedData, forKey: cache.id)
+                UserDefaults.cacheSystem.set(encodedData, forKey: cache.id)
                 
                 let currentUsed = UserDefaults.cacheSystem.integer(forKey: "usedCapacity")
                 UserDefaults.cacheSystem.set(currentUsed + Int(cache.fileSize), forKey: "usedCapacity")

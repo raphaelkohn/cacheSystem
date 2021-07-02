@@ -46,6 +46,7 @@ import Foundation
         coder.encode(id, forKey: "id")
         coder.encode(remoteUrl, forKey: "remoteUrl")
         coder.encode(cached, forKey: "cached")
+        coder.encode(imageData, forKey: "imageData")
     }
     
     @objc public required init?(coder: NSCoder) {
@@ -55,5 +56,6 @@ import Foundation
         self.id        = coder.decodeObject(forKey: "id") as! String
         self.remoteUrl = coder.decodeObject(forKey: "remoteUrl") as! String
         self.cached    = coder.decodeBool(forKey: "cached")
+        self.imageData = coder.decodeObject(forKey: "imageData") as? Data
     }
 }
